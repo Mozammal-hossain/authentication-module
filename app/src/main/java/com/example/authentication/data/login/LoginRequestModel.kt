@@ -1,4 +1,4 @@
-package com.example.authentication.model
+package com.example.authentication.data.login
 
 data class LoginRequestModel(
     val FCMToken: String,
