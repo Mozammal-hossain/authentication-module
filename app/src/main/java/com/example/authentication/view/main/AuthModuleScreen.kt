@@ -2,6 +2,7 @@
 
 package com.example.authentication.view.main
 
+
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.authentication.R
 import com.example.authmodulejpc.presentation.auth.ChangePasswordScreen
 import com.example.authmodulejpc.presentation.auth.EmailConfirmationScreen
-import com.example.authmodulejpc.presentation.auth.ForgotPasswordScreen
+import com.example.authentication.view.auth.ForgotPasswordScreen
 import com.example.authentication.view.auth.LoginScreen
 import com.example.authmodulejpc.presentation.auth.ResetPasswordScreen
 import com.example.authmodulejpc.presentation.auth.SignUpScreen
@@ -42,7 +43,7 @@ enum class AuthModuleScreen(@StringRes val title: Int) {
     ResetPassword(title = R.string.reset_password),
     UpdateProfile(title = R.string.update_profile),
     ChangePassword(title = R.string.change_password),
-    OTP(title = R.string.otp_sent),
+    EmailConfirmation(title = R.string.email_confirmation),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,16 +114,19 @@ fun AuthModuleApp(
                         navController.navigate(AuthModuleScreen.Start.name)
                     },
                     onNavigateToOTP = {
-                        navController.navigate(AuthModuleScreen.OTP.name)
+                        navController.navigate(AuthModuleScreen.EmailConfirmation.name)
                     }
                 )
             }
 
             composable(route = AuthModuleScreen.ForgotPassword.name) {
-                ForgotPasswordScreen()
+                ForgotPasswordScreen(
+                    onNavigateToOTP = {
+                        navController.navigate(AuthModuleScreen.EmailConfirmation.name)
+                    }
+                )
             }
-
-            composable(route = AuthModuleScreen.OTP.name) {
+            composable(route = AuthModuleScreen.EmailConfirmation.name) {
                 EmailConfirmationScreen()
             }
 

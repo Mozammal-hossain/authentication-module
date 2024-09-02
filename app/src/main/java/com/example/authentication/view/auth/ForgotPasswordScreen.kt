@@ -1,5 +1,6 @@
-package com.example.authmodulejpc.presentation.auth
+package com.example.authentication.view.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,20 +13,51 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.authentication.model.ForgotPassResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
+import com.example.authentication.view.main.AuthModuleScreen
+import com.example.authentication.viewModel.ForgotPassViewModel
+import timber.log.Timber
+
 
 @Composable
-fun ForgotPasswordScreen() {
+fun ForgotPasswordScreen(
+    forgotPassViewModel: ForgotPassViewModel = viewModel(),
+    onNavigateToOTP: () -> Unit
+) {
     val email = remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    // Observing the LiveData from the ViewModel
+    val forgotPassState by forgotPassViewModel.forgotPassState.observeAsState()
+    val errorState by forgotPassViewModel.errorState.observeAsState()
+
+    forgotPassState?.let {
+        if (it is ForgotPassResult.Success) {
+            forgotPassViewModel.resetForgotPassState()
+            onNavigateToOTP()
+            Toast.makeText(
+                context,
+                it.response.message,
+                Toast.LENGTH_LONG
+            ).show()
+
+            Timber.i("Forgot Password successful: ${it.response}")
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -50,7 +82,22 @@ fun ForgotPasswordScreen() {
 
         Column {
             Button(
-                onClick = {  },
+                onClick =
+
+                {
+                    Timber.tag("ForgotPasswordScreenDebug")
+                        .d("Email: ${email.value}")
+
+                    // Trigger the Forgot Password process
+                    forgotPassViewModel.forgotPassword(email.value);
+
+
+
+                    errorState?.let {
+                        Toast.makeText( context,   it, Toast.LENGTH_LONG).show()
+                    }
+
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),
