@@ -7,11 +7,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.authentication.data.forgotPassword.ForgotPassResModel
 import com.example.authentication.model.ForgotPassModel
 import com.example.authentication.model.ForgotPassResult
+import com.example.authentication.services.network.NetworkService
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class ForgotPassViewModel : ViewModel() {
-    private val forgotPassModel = ForgotPassModel()
+@HiltViewModel
+class ForgotPassViewModel @Inject constructor(
+    private val forgotPassModel: ForgotPassModel
+) : ViewModel() {
+
+
+    // Email for password reset
+    var correctEmail: String = ""
 
     /// LiveData for forgot password state
     private val _forgotPassState = MutableLiveData<ForgotPassResult? >()
@@ -29,6 +38,8 @@ class ForgotPassViewModel : ViewModel() {
                 is ForgotPassResult.Success -> {
                     _forgotPassState.value = result
                     _errorState.value = null
+
+                    correctEmail = email;
 
 
                     Timber.i("Login successful: ${result.response.message}")

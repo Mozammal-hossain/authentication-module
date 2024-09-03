@@ -1,5 +1,6 @@
-package com.example.authmodulejpc.presentation.auth
+package com.example.authentication.view.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,20 +13,67 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.authentication.model.OTPValidationResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
+import com.example.authentication.viewModel.OTPValidationViewModel
+import timber.log.Timber
 
 @Composable
-fun EmailConfirmationScreen() {
+fun EmailConfirmationScreen(
+) {
+
+    val otpValidationViewModel = hiltViewModel<OTPValidationViewModel>()
+
+
+
     val otpCode = remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    // Observing the LiveData from the ViewModel
+    val otpValidationState by otpValidationViewModel.otpValidationState.observeAsState()
+    val errorState by otpValidationViewModel.errorState.observeAsState()
+
+
+    otpValidationState?.let {
+        if ( it is OTPValidationResult.Success) {
+            otpValidationViewModel.resetOTPValidationState()
+            Toast.makeText(
+                context,
+                "OTP code is valid",
+                Toast.LENGTH_LONG
+            ).show()
+
+            Timber.i("OTP Validation successful: ${it.response.message}")
+        }
+    }
+
+
+    errorState?.let {
+        if (it is OTPValidationResult.Error) {
+            Timber.e("OTP Validation failed: ${it.error.message}")
+            Toast.makeText(
+                context,
+                "OTP validation failed: ${it.error.message}",
+                Toast.LENGTH_LONG
+            ).show()
+            otpValidationViewModel.resetOTPValidationState() // Reset error state after handling
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -50,7 +98,11 @@ fun EmailConfirmationScreen() {
 
         Column {
             Button(
-                onClick = {  },
+                onClick = {
+                    otpValidationViewModel.validateOTP(
+                        otp = otpCode.value
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),

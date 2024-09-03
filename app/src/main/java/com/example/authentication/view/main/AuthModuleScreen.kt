@@ -27,13 +27,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.authentication.R
-import com.example.authmodulejpc.presentation.auth.ChangePasswordScreen
-import com.example.authmodulejpc.presentation.auth.EmailConfirmationScreen
+import com.example.authentication.view.auth.ChangePasswordScreen
+import com.example.authentication.view.auth.EmailConfirmationScreen
 import com.example.authentication.view.auth.ForgotPasswordScreen
 import com.example.authentication.view.auth.LoginScreen
-import com.example.authmodulejpc.presentation.auth.ResetPasswordScreen
-import com.example.authmodulejpc.presentation.auth.SignUpScreen
+import com.example.authentication.view.auth.ResetPasswordScreen
+import com.example.authentication.view.auth.SignUpScreen
+import com.example.authentication.viewModel.OTPValidationViewModel
 import androidx.navigation.compose.NavHost as NavHost
+
 
 enum class AuthModuleScreen(@StringRes val title: Int) {
     Start(title = R.string.login),
@@ -104,7 +106,8 @@ fun AuthModuleApp(
                     },
                     onNavigateToDashboard = {
                         navController.navigate(AuthModuleScreen.Dashboard.name)
-                    }
+                    },
+
                 )
             }
 

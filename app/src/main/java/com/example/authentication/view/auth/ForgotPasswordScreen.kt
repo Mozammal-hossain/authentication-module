@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -24,20 +26,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.authentication.model.ForgotPassResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
-import com.example.authentication.view.main.AuthModuleScreen
 import com.example.authentication.viewModel.ForgotPassViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun ForgotPasswordScreen(
-    forgotPassViewModel: ForgotPassViewModel = viewModel(),
-    onNavigateToOTP: () -> Unit
+    onNavigateToOTP: () -> Unit,
 ) {
+    val forgotPassViewModel: ForgotPassViewModel = hiltViewModel()
+
+
     val email = remember { mutableStateOf("") }
     val context = LocalContext.current
 
@@ -45,19 +50,23 @@ fun ForgotPasswordScreen(
     val forgotPassState by forgotPassViewModel.forgotPassState.observeAsState()
     val errorState by forgotPassViewModel.errorState.observeAsState()
 
-    forgotPassState?.let {
-        if (it is ForgotPassResult.Success) {
-            forgotPassViewModel.resetForgotPassState()
+    // Trigger navigation when forgotPassState is Success
+    LaunchedEffect(forgotPassState) {
+        if (forgotPassState is ForgotPassResult.Success) {
+            Timber.i("Forgot Password successful: ${(forgotPassState as ForgotPassResult.Success).response.message}")
             onNavigateToOTP()
-            Toast.makeText(
-                context,
-                it.response.message,
-                Toast.LENGTH_LONG
-            ).show()
-
-            Timber.i("Forgot Password successful: ${it.response}")
+            Toast.makeText(context, (forgotPassState as ForgotPassResult.Success).response.message, Toast.LENGTH_LONG).show()
+            forgotPassViewModel.resetForgotPassState() // Reset after handling success
         }
     }
+
+    LaunchedEffect(errorState) {
+        errorState?.let {
+            Toast.makeText(context, errorState.toString() , Toast.LENGTH_LONG).show()
+            forgotPassViewModel.resetForgotPassState()
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -94,7 +103,7 @@ fun ForgotPasswordScreen(
 
 
                     errorState?.let {
-                        Toast.makeText( context,   it, Toast.LENGTH_LONG).show()
+                        Toast.makeText( context,   errorState.toString(), Toast.LENGTH_LONG).show()
                     }
 
                 },

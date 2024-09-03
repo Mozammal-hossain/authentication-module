@@ -1,4 +1,4 @@
-package com.example.authmodulejpc.presentation.auth
+package com.example.authentication.view.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

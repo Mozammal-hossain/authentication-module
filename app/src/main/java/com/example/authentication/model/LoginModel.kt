@@ -2,22 +2,24 @@ package com.example.authentication.model
 
 import com.example.authentication.data.login.LoginRequestModel
 import com.example.authentication.data.login.LoginResponseModel
-import NetworkModule
 import com.example.authentication.data.shared.ErrorModel
+import com.example.authentication.services.network.NetworkService
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
+import javax.inject.Inject
 
 sealed class LoginResult {
     data class Success(val response: LoginResponseModel) : LoginResult()
-    data class Error(val errorModel: ErrorModel) : LoginResult()
+    data class Error(val error: ErrorModel) : LoginResult()
 }
 
-class LoginModel {
-    private  val apiService = NetworkModule.api
+class LoginModel @Inject constructor(
+    private val apiService: NetworkService
+) {
 
     private var _loginResponse: LoginResponseModel? = null;
 

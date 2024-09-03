@@ -10,6 +10,8 @@ import androidx.core.view.WindowCompat
 import com.example.authentication.ui.theme.AuthenticationTheme
 import com.example.authentication.view.main.AuthModuleApp
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

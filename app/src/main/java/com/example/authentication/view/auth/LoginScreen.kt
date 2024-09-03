@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.authentication.R
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
@@ -54,8 +55,10 @@ fun LoginScreen(
     onNavigateToDashboard: (Int) -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
-    loginViewModel: LoginViewModel = viewModel()
+
 ) {
+
+    val loginViewModel = hiltViewModel<LoginViewModel>();
     // State variables to store email, password, and remember me checkbox status
     var checked by remember { mutableStateOf(false) }
     val email = remember { mutableStateOf("") }
@@ -106,9 +109,13 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Divider(modifier = Modifier.weight(1f).height(1.dp))
+                Divider(modifier = Modifier
+                    .weight(1f)
+                    .height(1.dp))
                 Text(text = "OR", Modifier.padding(horizontal = 15.dp))
-                Divider(modifier = Modifier.weight(1f).height(1.dp))
+                Divider(modifier = Modifier
+                    .weight(1f)
+                    .height(1.dp))
             }
         }
 
