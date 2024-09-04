@@ -24,38 +24,37 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.authentication.model.OTPValidationResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
 import com.example.authentication.viewModel.ForgotPassViewModel
-import com.example.authentication.viewModel.OTPValidationViewModel
 import timber.log.Timber
 
 @Composable
-fun EmailConfirmationScreen(
-    email: String
+fun OTPConfirmationScreen(
+    onNavigateToLogin: () -> Unit,
+    forgotPassViewModel: ForgotPassViewModel
 ) {
-
-    val otpValidationViewModel = hiltViewModel<OTPValidationViewModel>()
 
     val otpCode = remember { mutableStateOf("") }
     val context = LocalContext.current
 
     // Observing the LiveData from the ViewModel
-    val otpValidationState by otpValidationViewModel.otpValidationState.observeAsState()
-    val errorState by otpValidationViewModel.errorState.observeAsState()
+    val otpValidationState by forgotPassViewModel.otpValidationState.observeAsState()
+    val errorState by forgotPassViewModel.errorState.observeAsState()
 
 
     otpValidationState?.let {
         if ( it is OTPValidationResult.Success) {
-            otpValidationViewModel.resetOTPValidationState()
+
+            forgotPassViewModel.resetOTPValidationState()
             Toast.makeText(
                 context,
                 "OTP code is valid",
                 Toast.LENGTH_LONG
             ).show()
+
+            onNavigateToLogin()
 
             Timber.i("OTP Validation successful: ${it.response.message}")
         }
@@ -63,15 +62,13 @@ fun EmailConfirmationScreen(
 
 
     errorState?.let {
-        if (it is OTPValidationResult.Error) {
-            Timber.e("OTP Validation failed: ${it.error.message}")
-            Toast.makeText(
-                context,
-                "OTP validation failed: ${it.error.message}",
-                Toast.LENGTH_LONG
-            ).show()
-            otpValidationViewModel.resetOTPValidationState() // Reset error state after handling
-        }
+        Timber.e("OTP Validation failed: $it")
+        Toast.makeText(
+            context,
+            it,
+            Toast.LENGTH_LONG
+        ).show()
+        forgotPassViewModel.resetOTPValidationState() // Reset error state after handling
     }
 
 
@@ -99,8 +96,7 @@ fun EmailConfirmationScreen(
         Column {
             Button(
                 onClick = {
-                    otpValidationViewModel.validateOTP(
-                        email = email,
+                    forgotPassViewModel.validateOTP(
                         otp = otpCode.value
                     )
                 },

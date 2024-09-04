@@ -35,7 +35,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit) {
     val forgotPassViewModel: ForgotPassViewModel = hiltViewModel()
@@ -97,12 +96,6 @@ fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit) {
 
                     // Trigger the Forgot Password process
                     forgotPassViewModel.forgotPassword(email.value);
-
-
-
-                    errorState?.let {
-                        Toast.makeText( context,   errorState.toString(), Toast.LENGTH_LONG).show()
-                    }
 
                 },
                 modifier = Modifier

@@ -22,18 +22,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.authentication.R
 import com.example.authentication.view.auth.ChangePasswordScreen
-import com.example.authentication.view.auth.EmailConfirmationScreen
 import com.example.authentication.view.auth.ForgotPasswordScreen
 import com.example.authentication.view.auth.LoginScreen
+import com.example.authentication.view.auth.OTPConfirmationScreen
 import com.example.authentication.view.auth.ResetPasswordScreen
 import com.example.authentication.view.auth.SignUpScreen
-import com.example.authentication.viewModel.OTPValidationViewModel
+import com.example.authentication.viewModel.ForgotPassViewModel
 import androidx.navigation.compose.NavHost as NavHost
 
 
@@ -123,17 +124,24 @@ fun AuthModuleApp(
             }
 
             composable(route = AuthModuleScreen.ForgotPassword.name) {
+                backStackEntry -> val viewModel: ForgotPassViewModel = hiltViewModel(backStackEntry)
                 ForgotPasswordScreen(
-                    onNavigateToOTP = { email ->
-                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/$email")
+                    onNavigateToOTP = {
+                        navController.navigate(AuthModuleScreen.EmailConfirmation.name)
                     }
                 )
             }
 
-            composable(route = "${AuthModuleScreen.EmailConfirmation.name}/{email}") {
-                backStackEntry -> val email = backStackEntry.arguments?.getString("email") ?: ""
+            composable(route = AuthModuleScreen.EmailConfirmation.name) {
 
-                EmailConfirmationScreen(email = email)
+            val forgotPassViewModel: ForgotPassViewModel =  hiltViewModel(navController.previousBackStackEntry!!)
+
+                OTPConfirmationScreen(
+                    onNavigateToLogin = {
+                        navController.navigate(AuthModuleScreen.Start.name)
+                    },
+                    forgotPassViewModel = forgotPassViewModel
+                )
             }
 
 

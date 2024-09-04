@@ -48,17 +48,15 @@ import timber.log.Timber
  * @param onNavigateToDashboard Navigates to the Dashboard screen.
  * @param onNavigateToForgotPassword Navigates to the Forgot Password screen.
  * @param onNavigateToSignUp Navigates to the Sign-Up screen.
- * @param loginViewModel The ViewModel responsible for handling the login logic.
  */
 @Composable
 fun LoginScreen(
     onNavigateToDashboard: (Int) -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
-
 ) {
 
-    val loginViewModel = hiltViewModel<LoginViewModel>();
+    val loginViewModel = hiltViewModel<LoginViewModel>()
     // State variables to store email, password, and remember me checkbox status
     var checked by remember { mutableStateOf(false) }
     val email = remember { mutableStateOf("") }

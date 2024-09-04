@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.authentication.data.forgotPassword.ForgotPassResModel
 import com.example.authentication.model.ForgotPassModel
 import com.example.authentication.model.ForgotPassResult
+import com.example.authentication.model.OTPValidationModel
+import com.example.authentication.model.OTPValidationResult
 import com.example.authentication.services.network.NetworkService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,12 +17,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForgotPassViewModel @Inject constructor(
-    private val forgotPassModel: ForgotPassModel
+    private val forgotPassModel: ForgotPassModel,
+    private val otpValidationModel: OTPValidationModel
 ) : ViewModel() {
 
 
     // Email for password reset
-    var correctEmail: String = ""
+    private var correctEmail: String = ""
 
     /// LiveData for forgot password state
     private val _forgotPassState = MutableLiveData<ForgotPassResult? >()
@@ -54,6 +57,34 @@ class ForgotPassViewModel @Inject constructor(
 
     fun resetForgotPassState() {
         _forgotPassState.value = null
+    }
+
+    private  val _otpValidationState = MutableLiveData<OTPValidationResult?>()
+    val otpValidationState: LiveData<OTPValidationResult?> get() = _otpValidationState
+
+
+
+    fun validateOTP(otp: String){
+        Timber.i("email is $correctEmail and otp is $otp");
+
+        viewModelScope.launch {
+            when (val result = otpValidationModel.validateOTP(correctEmail, otp)) {
+
+                is OTPValidationResult.Success -> {
+                    _otpValidationState.value = result
+                    _errorState.value = null  // Clear any previous errors
+                    Timber.i("Login successful: ${result.response.message}")
+                }
+                is OTPValidationResult.Error -> {
+                    _errorState.value = result.error.message
+                    Timber.e("Login failed: ${result.error.message}")
+                }
+            }
+        }
+    }
+
+    fun resetOTPValidationState() {
+        _otpValidationState.value = null
     }
 
 
