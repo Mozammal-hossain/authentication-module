@@ -37,9 +37,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoroutinesApi::class)
 @Composable
-fun ForgotPasswordScreen(
-    onNavigateToOTP: () -> Unit,
-) {
+fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit) {
     val forgotPassViewModel: ForgotPassViewModel = hiltViewModel()
 
 
@@ -54,7 +52,7 @@ fun ForgotPasswordScreen(
     LaunchedEffect(forgotPassState) {
         if (forgotPassState is ForgotPassResult.Success) {
             Timber.i("Forgot Password successful: ${(forgotPassState as ForgotPassResult.Success).response.message}")
-            onNavigateToOTP()
+            onNavigateToOTP(email.value)
             Toast.makeText(context, (forgotPassState as ForgotPassResult.Success).response.message, Toast.LENGTH_LONG).show()
             forgotPassViewModel.resetForgotPassState() // Reset after handling success
         }

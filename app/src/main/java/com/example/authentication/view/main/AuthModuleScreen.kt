@@ -124,14 +124,18 @@ fun AuthModuleApp(
 
             composable(route = AuthModuleScreen.ForgotPassword.name) {
                 ForgotPasswordScreen(
-                    onNavigateToOTP = {
-                        navController.navigate(AuthModuleScreen.EmailConfirmation.name)
+                    onNavigateToOTP = { email ->
+                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/$email")
                     }
                 )
             }
-            composable(route = AuthModuleScreen.EmailConfirmation.name) {
-                EmailConfirmationScreen()
+
+            composable(route = "${AuthModuleScreen.EmailConfirmation.name}/{email}") {
+                backStackEntry -> val email = backStackEntry.arguments?.getString("email") ?: ""
+
+                EmailConfirmationScreen(email = email)
             }
+
 
             composable(route = AuthModuleScreen.ResetPassword.name) {
                 ResetPasswordScreen()

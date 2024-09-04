@@ -5,7 +5,6 @@ import com.example.authentication.data.forgotPassword.ForgotPassResModel
 import com.example.authentication.data.shared.ErrorModel
 import com.example.authentication.model.shared.ErrorUtils.parseError
 import com.example.authentication.services.network.NetworkService
-import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject

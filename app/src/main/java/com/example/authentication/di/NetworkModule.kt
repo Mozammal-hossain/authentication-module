@@ -1,5 +1,6 @@
-import com.example.authentication.services.network.NetworkService
+package com.example.authentication.di
 
+import com.example.authentication.services.network.NetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +12,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-   private const val BASE_URL = "http://34.72.136.54:4067/api/v1/auth/"
+    private const val BASE_URL = "http://34.72.136.54:4067/api/v1/auth/"
 
     @Provides
     @Singleton
@@ -20,6 +21,6 @@ object NetworkModule {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        return  retrofit.create(NetworkService::class.java);
+        return retrofit.create(NetworkService::class.java)
     }
 }

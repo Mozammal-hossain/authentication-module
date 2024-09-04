@@ -29,16 +29,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.authentication.model.OTPValidationResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
+import com.example.authentication.viewModel.ForgotPassViewModel
 import com.example.authentication.viewModel.OTPValidationViewModel
 import timber.log.Timber
 
 @Composable
 fun EmailConfirmationScreen(
+    email: String
 ) {
 
     val otpValidationViewModel = hiltViewModel<OTPValidationViewModel>()
-
-
 
     val otpCode = remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -100,6 +100,7 @@ fun EmailConfirmationScreen(
             Button(
                 onClick = {
                     otpValidationViewModel.validateOTP(
+                        email = email,
                         otp = otpCode.value
                     )
                 },

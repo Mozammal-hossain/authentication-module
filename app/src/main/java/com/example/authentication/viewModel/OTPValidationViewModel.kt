@@ -1,5 +1,6 @@
 package com.example.authentication.viewModel
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OTPValidationViewModel @Inject constructor(
-    private val forgotPassViewModel: ForgotPassViewModel,
     private val otpValidationModel: OTPValidationModel
 ): ViewModel() {
 
@@ -26,9 +26,12 @@ class OTPValidationViewModel @Inject constructor(
     val errorState: LiveData<OTPValidationResult?> get() = _errorState
 
 
-    fun validateOTP(otp: String){
+    fun validateOTP(email: String,otp: String){
+        Timber.i("email is $email and otp is $otp");
+
         viewModelScope.launch {
-            when (val result = otpValidationModel.validateOTP(forgotPassViewModel.correctEmail, otp)) {
+            when (val result = otpValidationModel.validateOTP(email, otp)) {
+
                 is OTPValidationResult.Success -> {
                     _otpValidationState.value = result
                     _errorState.value = null  // Clear any previous errors
