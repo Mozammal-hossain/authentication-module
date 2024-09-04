@@ -1,4 +1,4 @@
-package com.example.authentication.data.login
+package com.example.authentication.model.data.login
 
 data class LoginErrorModel(
     val errorMessages: List<ErrorMessage>,

@@ -1,5 +1,6 @@
-package com.example.authmodulejpc.presentation.auth
+package com.example.authentication.ui.screen.forgotPssword
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,19 +13,54 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.authentication.model.SetNewPassResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
+import timber.log.Timber
 
 @Composable
-fun ChangePasswordScreen() {
+fun SetPasswordScreen(
+    viewModel: ForgotPassViewModel,
+    navigateToLogin: () -> Unit
+) {
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
-    val oldPassword = remember { mutableStateOf("") }
+
+    val context = LocalContext.current
+
+    // Observing the LiveData from the ViewModel
+    val setNewPassState by viewModel.setNewPassState.observeAsState()
+    val errorState by viewModel.errorState.observeAsState()
+
+    // Trigger navigation when setPassState is Success
+    LaunchedEffect(setNewPassState) {
+        if (setNewPassState is SetNewPassResult.Success) {
+            Timber.i("Forgot Password successful: ${(setNewPassState as SetNewPassResult.Success).response.message}")
+
+            navigateToLogin()
+
+            Toast.makeText(context, (setNewPassState as SetNewPassResult.Success).response.message, Toast.LENGTH_LONG).show()
+
+            viewModel.resetSetPassState() // Reset after handling success
+        }
+    }
+
+    LaunchedEffect(errorState) {
+        errorState?.let {
+            Toast.makeText(context, errorState.toString() , Toast.LENGTH_LONG).show()
+            viewModel.resetSetPassState()
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -34,18 +70,10 @@ fun ChangePasswordScreen() {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         PageName(
-            pageTitle = "Change Password",
-            pageSubTitle = "Make sure to enter a strong password to ensure your security.",
+            pageTitle = "Reset Password",
+            pageSubTitle = "Please enter a new password. Don’t enter your old password.",
         )
         Spacer(modifier = Modifier.height(70.dp))
-
-        InputFieldWithLabel(
-            label = "Old Password",
-            hintText = "",
-            textFieldValue = oldPassword,
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
 
         InputFieldWithLabel(
             label = "Password",
@@ -65,7 +93,12 @@ fun ChangePasswordScreen() {
 
         Column {
             Button(
-                onClick = {  },
+                onClick = {
+                    viewModel.setPass(
+                        password = password.value,
+                        confirmPassword = confirmPassword.value
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),

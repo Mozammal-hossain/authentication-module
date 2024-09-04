@@ -18,4 +18,5 @@
     <string name="sign_up_success">Sign Up Success</string>
     <string name="back_button">Back</string>
     <string name="change_password">Change Password</string>
+    <string name="email_confirmation">Email Confirmation</string>
 </resources>

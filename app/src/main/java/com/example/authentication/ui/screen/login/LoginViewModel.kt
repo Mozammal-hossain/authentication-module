@@ -1,18 +1,21 @@
-package com.example.authentication.viewModel
+package com.example.authentication.ui.screen.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.authentication.data.login.LoginResponseModel
+import com.example.authentication.model.data.login.LoginResponseModel
 import com.example.authentication.model.LoginModel
 import com.example.authentication.model.LoginResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
-
-    private  val loginModel = LoginModel()
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginModel: LoginModel
+) : ViewModel() {
 
     /// LiveData for profile state
     private val _profileState = MutableLiveData<LoginResponseModel?>()
@@ -31,8 +34,8 @@ class LoginViewModel : ViewModel() {
                     Timber.i("Login successful: ${result.response.user}")
                 }
                 is LoginResult.Error -> {
-                    _errorState.value = result.errorModel.message
-                    Timber.e("Login failed: ${result.errorModel.message}")
+                    _errorState.value = result.error.message
+                    Timber.e("Login failed: ${result.error.message}")
                 }
             }
         }

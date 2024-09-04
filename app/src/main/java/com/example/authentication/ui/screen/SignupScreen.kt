@@ -1,4 +1,4 @@
-package com.example.authmodulejpc.presentation.auth
+package com.example.authentication.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.authentication.data.login.LoginResponseModel
+import com.example.authentication.model.data.login.LoginResponseModel
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
 

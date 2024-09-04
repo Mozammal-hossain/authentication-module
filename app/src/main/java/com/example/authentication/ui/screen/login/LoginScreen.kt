@@ -1,4 +1,4 @@
-package com.example.authentication.view.auth
+package com.example.authentication.ui.screen.login
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -34,11 +34,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.authentication.R
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
-import com.example.authentication.viewModel.LoginViewModel
 import timber.log.Timber
 
 /**
@@ -47,15 +46,15 @@ import timber.log.Timber
  * @param onNavigateToDashboard Navigates to the Dashboard screen.
  * @param onNavigateToForgotPassword Navigates to the Forgot Password screen.
  * @param onNavigateToSignUp Navigates to the Sign-Up screen.
- * @param loginViewModel The ViewModel responsible for handling the login logic.
  */
 @Composable
 fun LoginScreen(
     onNavigateToDashboard: (Int) -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
-    loginViewModel: LoginViewModel = viewModel()
 ) {
+
+    val loginViewModel = hiltViewModel<LoginViewModel>()
     // State variables to store email, password, and remember me checkbox status
     var checked by remember { mutableStateOf(false) }
     val email = remember { mutableStateOf("") }
@@ -106,9 +105,13 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Divider(modifier = Modifier.weight(1f).height(1.dp))
+                Divider(modifier = Modifier
+                    .weight(1f)
+                    .height(1.dp))
                 Text(text = "OR", Modifier.padding(horizontal = 15.dp))
-                Divider(modifier = Modifier.weight(1f).height(1.dp))
+                Divider(modifier = Modifier
+                    .weight(1f)
+                    .height(1.dp))
             }
         }
 
