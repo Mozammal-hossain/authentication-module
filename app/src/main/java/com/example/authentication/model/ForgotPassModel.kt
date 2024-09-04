@@ -1,8 +1,8 @@
 package com.example.authentication.model
 
-import com.example.authentication.data.forgotPassword.ForgotPassReqModel
-import com.example.authentication.data.forgotPassword.ForgotPassResModel
-import com.example.authentication.data.shared.ErrorModel
+import com.example.authentication.model.data.forgotPassword.ForgotPassReqModel
+import com.example.authentication.model.data.forgotPassword.ForgotPassResModel
+import com.example.authentication.model.data.shared.ErrorModel
 import com.example.authentication.model.shared.ErrorUtils.parseError
 import com.example.authentication.services.network.NetworkService
 import retrofit2.HttpException

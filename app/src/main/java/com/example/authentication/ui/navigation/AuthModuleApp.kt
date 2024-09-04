@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.authentication.view.main
+package com.example.authentication.ui.navigation
 
 
 import androidx.annotation.StringRes
@@ -28,13 +28,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.authentication.R
-import com.example.authentication.view.auth.ChangePasswordScreen
-import com.example.authentication.view.auth.ForgotPasswordScreen
-import com.example.authentication.view.auth.LoginScreen
-import com.example.authentication.view.auth.OTPConfirmationScreen
-import com.example.authentication.view.auth.ResetPasswordScreen
-import com.example.authentication.view.auth.SignUpScreen
-import com.example.authentication.viewModel.ForgotPassViewModel
+import com.example.authentication.ui.screen.ChangePasswordScreen
+import com.example.authentication.ui.screen.forgotPssword.ForgotPasswordScreen
+import com.example.authentication.ui.screen.login.LoginScreen
+import com.example.authentication.ui.screen.forgotPssword.OTPConfirmationScreen
+import com.example.authentication.ui.screen.forgotPssword.ResetPasswordScreen
+import com.example.authentication.ui.screen.SignUpScreen
+import com.example.authentication.ui.screen.forgotPssword.ForgotPassViewModel
 import androidx.navigation.compose.NavHost as NavHost
 
 

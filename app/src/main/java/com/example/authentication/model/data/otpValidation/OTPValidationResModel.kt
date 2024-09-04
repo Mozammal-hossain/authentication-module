@@ -1,4 +1,4 @@
-package com.example.authentication.data.otpValidation
+package com.example.authentication.model.data.otpValidation
 
 data class OTPValidationResModel(
     val message: String

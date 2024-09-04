@@ -1,11 +1,11 @@
 package com.example.authentication.services.network
 
-import com.example.authentication.data.forgotPassword.ForgotPassReqModel
-import com.example.authentication.data.forgotPassword.ForgotPassResModel
-import com.example.authentication.data.login.LoginRequestModel
-import com.example.authentication.data.login.LoginResponseModel
-import com.example.authentication.data.otpValidation.OTPValidationReqModel
-import com.example.authentication.data.otpValidation.OTPValidationResModel
+import com.example.authentication.model.data.forgotPassword.ForgotPassReqModel
+import com.example.authentication.model.data.forgotPassword.ForgotPassResModel
+import com.example.authentication.model.data.login.LoginRequestModel
+import com.example.authentication.model.data.login.LoginResponseModel
+import com.example.authentication.model.data.otpValidation.OTPValidationReqModel
+import com.example.authentication.model.data.otpValidation.OTPValidationResModel
 import retrofit2.http.Body
 import retrofit2.http.POST
 

@@ -1,8 +1,8 @@
 package com.example.authentication.model
 
-import com.example.authentication.data.login.LoginRequestModel
-import com.example.authentication.data.login.LoginResponseModel
-import com.example.authentication.data.shared.ErrorModel
+import com.example.authentication.model.data.login.LoginRequestModel
+import com.example.authentication.model.data.login.LoginResponseModel
+import com.example.authentication.model.data.shared.ErrorModel
 import com.example.authentication.services.network.NetworkService
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers

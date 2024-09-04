@@ -8,9 +8,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.example.authentication.ui.theme.AuthenticationTheme
-import com.example.authentication.view.main.AuthModuleApp
+import com.example.authentication.ui.navigation.AuthModuleApp
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 
 @AndroidEntryPoint

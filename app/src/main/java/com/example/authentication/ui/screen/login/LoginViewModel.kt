@@ -1,13 +1,12 @@
-package com.example.authentication.viewModel
+package com.example.authentication.ui.screen.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.authentication.data.login.LoginResponseModel
+import com.example.authentication.model.data.login.LoginResponseModel
 import com.example.authentication.model.LoginModel
 import com.example.authentication.model.LoginResult
-import com.example.authentication.services.network.NetworkService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber

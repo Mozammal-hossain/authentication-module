@@ -1,4 +1,4 @@
-package com.example.authentication.view.auth
+package com.example.authentication.ui.screen.forgotPssword
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import com.example.authentication.model.OTPValidationResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
-import com.example.authentication.viewModel.ForgotPassViewModel
 import timber.log.Timber
 
 @Composable

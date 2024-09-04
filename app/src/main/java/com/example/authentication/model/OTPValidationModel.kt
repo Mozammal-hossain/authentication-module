@@ -1,12 +1,10 @@
 package com.example.authentication.model
 
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.authentication.data.otpValidation.OTPValidationReqModel
-import com.example.authentication.data.otpValidation.OTPValidationResModel
-import com.example.authentication.data.shared.ErrorModel
+import com.example.authentication.model.data.otpValidation.OTPValidationReqModel
+import com.example.authentication.model.data.otpValidation.OTPValidationResModel
+import com.example.authentication.model.data.shared.ErrorModel
 import com.example.authentication.model.shared.ErrorUtils.parseError
 import com.example.authentication.services.network.NetworkService
-import com.example.authentication.viewModel.ForgotPassViewModel
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject

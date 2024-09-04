@@ -1,4 +1,4 @@
-package com.example.authentication.view.auth
+package com.example.authentication.ui.screen.login
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -35,11 +35,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.authentication.R
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
-import com.example.authentication.viewModel.LoginViewModel
 import timber.log.Timber
 
 /**

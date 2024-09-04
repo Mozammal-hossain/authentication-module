@@ -1,6 +1,6 @@
 package com.example.authentication.model.shared
 
-import com.example.authentication.data.shared.ErrorModel
+import com.example.authentication.model.data.shared.ErrorModel
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

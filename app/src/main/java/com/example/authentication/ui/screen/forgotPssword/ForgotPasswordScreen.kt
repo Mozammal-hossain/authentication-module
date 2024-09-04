@@ -1,4 +1,4 @@
-package com.example.authentication.view.auth
+package com.example.authentication.ui.screen.forgotPssword
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,8 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.authentication.model.ForgotPassResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
-import com.example.authentication.viewModel.ForgotPassViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
 

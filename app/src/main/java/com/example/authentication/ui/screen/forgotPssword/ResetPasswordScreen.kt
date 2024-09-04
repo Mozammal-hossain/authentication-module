@@ -1,4 +1,4 @@
-package com.example.authentication.view.auth
+package com.example.authentication.ui.screen.forgotPssword
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,10 +21,9 @@ import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
 
 @Composable
-fun ChangePasswordScreen() {
+fun ResetPasswordScreen() {
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
-    val oldPassword = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -34,18 +33,10 @@ fun ChangePasswordScreen() {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         PageName(
-            pageTitle = "Change Password",
-            pageSubTitle = "Make sure to enter a strong password to ensure your security.",
+            pageTitle = "Reset Password",
+            pageSubTitle = "Please enter a new password. Don’t enter your old password.",
         )
         Spacer(modifier = Modifier.height(70.dp))
-
-        InputFieldWithLabel(
-            label = "Old Password",
-            hintText = "",
-            textFieldValue = oldPassword,
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
 
         InputFieldWithLabel(
             label = "Password",

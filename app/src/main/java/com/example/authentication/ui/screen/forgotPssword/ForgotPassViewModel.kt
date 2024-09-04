@@ -1,15 +1,13 @@
-package com.example.authentication.viewModel
+package com.example.authentication.ui.screen.forgotPssword
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.authentication.data.forgotPassword.ForgotPassResModel
 import com.example.authentication.model.ForgotPassModel
 import com.example.authentication.model.ForgotPassResult
 import com.example.authentication.model.OTPValidationModel
 import com.example.authentication.model.OTPValidationResult
-import com.example.authentication.services.network.NetworkService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
