@@ -31,7 +31,7 @@ import timber.log.Timber
 
 @Composable
 fun OTPConfirmationScreen(
-    onNavigateToLogin: () -> Unit,
+    onNavigateToResetPass: () -> Unit,
     forgotPassViewModel: ForgotPassViewModel
 ) {
 
@@ -53,7 +53,7 @@ fun OTPConfirmationScreen(
                 Toast.LENGTH_LONG
             ).show()
 
-            onNavigateToLogin()
+            onNavigateToResetPass()
 
             Timber.i("OTP Validation successful: ${it.response.message}")
         }

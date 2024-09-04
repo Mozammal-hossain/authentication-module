@@ -8,6 +8,8 @@ import com.example.authentication.model.ForgotPassModel
 import com.example.authentication.model.ForgotPassResult
 import com.example.authentication.model.OTPValidationModel
 import com.example.authentication.model.OTPValidationResult
+import com.example.authentication.model.SetNewPassModel
+import com.example.authentication.model.SetNewPassResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ForgotPassViewModel @Inject constructor(
     private val forgotPassModel: ForgotPassModel,
-    private val otpValidationModel: OTPValidationModel
+    private val otpValidationModel: OTPValidationModel,
+    private val setNewPassModel: SetNewPassModel
 ) : ViewModel() {
 
 
@@ -71,11 +74,11 @@ class ForgotPassViewModel @Inject constructor(
                 is OTPValidationResult.Success -> {
                     _otpValidationState.value = result
                     _errorState.value = null  // Clear any previous errors
-                    Timber.i("Login successful: ${result.response.message}")
+                    Timber.i("OTP successful: ${result.response.message}")
                 }
                 is OTPValidationResult.Error -> {
                     _errorState.value = result.error.message
-                    Timber.e("Login failed: ${result.error.message}")
+                    Timber.e("OTP failed: ${result.error.message}")
                 }
             }
         }
@@ -84,6 +87,35 @@ class ForgotPassViewModel @Inject constructor(
     fun resetOTPValidationState() {
         _otpValidationState.value = null
     }
+
+
+    private  val _setNewPassState = MutableLiveData<SetNewPassResult?>()
+    val setNewPassState: LiveData<SetNewPassResult?> get() = _setNewPassState
+
+
+
+    fun setPass(password: String, confirmPassword: String){
+        viewModelScope.launch {
+           when (val result = setNewPassModel.setNewPass(correctEmail, password, confirmPassword)) {
+                is SetNewPassResult.Success -> {
+                    _setNewPassState.value = result
+                    _errorState.value = null  // Clear any previous errors
+                    Timber.i("Reset successful: ${result.response.message}")
+                }
+                is SetNewPassResult.Error -> {
+                    _errorState.value = result.errorModel.message
+                    Timber.e("Reset failed: ${result.errorModel.message}")
+                }
+            }
+
+        }
+    }
+
+    fun resetSetPassState() {
+        _setNewPassState.value = null
+    }
+
+
 
 
 }

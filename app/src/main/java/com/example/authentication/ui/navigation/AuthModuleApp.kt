@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -32,7 +33,7 @@ import com.example.authentication.ui.screen.ChangePasswordScreen
 import com.example.authentication.ui.screen.forgotPssword.ForgotPasswordScreen
 import com.example.authentication.ui.screen.login.LoginScreen
 import com.example.authentication.ui.screen.forgotPssword.OTPConfirmationScreen
-import com.example.authentication.ui.screen.forgotPssword.ResetPasswordScreen
+import com.example.authentication.ui.screen.forgotPssword.SetPasswordScreen
 import com.example.authentication.ui.screen.SignUpScreen
 import com.example.authentication.ui.screen.forgotPssword.ForgotPassViewModel
 import androidx.navigation.compose.NavHost as NavHost
@@ -74,7 +75,6 @@ fun AuthModuleAppBar(
 }
 
 
-
 @Composable
 fun AuthModuleApp(
     navController: NavHostController = rememberNavController()
@@ -85,6 +85,8 @@ fun AuthModuleApp(
     val currentScreen = AuthModuleScreen.valueOf(
         backStackEntry?.destination?.route ?: AuthModuleScreen.Start.name
     )
+
+    val forgotPassViewModel: ForgotPassViewModel = viewModel()
 
     Scaffold {
         val innerPadding = it
@@ -109,7 +111,7 @@ fun AuthModuleApp(
                         navController.navigate(AuthModuleScreen.Dashboard.name)
                     },
 
-                )
+                    )
             }
 
             composable(route = AuthModuleScreen.Signup.name) {
@@ -124,21 +126,19 @@ fun AuthModuleApp(
             }
 
             composable(route = AuthModuleScreen.ForgotPassword.name) {
-                backStackEntry -> val viewModel: ForgotPassViewModel = hiltViewModel(backStackEntry)
                 ForgotPasswordScreen(
                     onNavigateToOTP = {
                         navController.navigate(AuthModuleScreen.EmailConfirmation.name)
-                    }
+                    },
+                    forgotPassViewModel = forgotPassViewModel,
                 )
             }
 
             composable(route = AuthModuleScreen.EmailConfirmation.name) {
 
-            val forgotPassViewModel: ForgotPassViewModel =  hiltViewModel(navController.previousBackStackEntry!!)
-
                 OTPConfirmationScreen(
-                    onNavigateToLogin = {
-                        navController.navigate(AuthModuleScreen.Start.name)
+                    onNavigateToResetPass = {
+                        navController.navigate(AuthModuleScreen.ResetPassword.name)
                     },
                     forgotPassViewModel = forgotPassViewModel
                 )
@@ -146,7 +146,13 @@ fun AuthModuleApp(
 
 
             composable(route = AuthModuleScreen.ResetPassword.name) {
-                ResetPasswordScreen()
+
+                SetPasswordScreen(
+                    viewModel = forgotPassViewModel,
+                    navigateToLogin = {
+                        navController.navigate(AuthModuleScreen.Start.name)
+                    },
+                )
             }
 
             composable(route = AuthModuleScreen.ChangePassword.name) {

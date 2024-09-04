@@ -33,9 +33,9 @@ import timber.log.Timber
 
 
 @Composable
-fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit) {
-    val forgotPassViewModel: ForgotPassViewModel = hiltViewModel()
-
+fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit,
+                         forgotPassViewModel: ForgotPassViewModel,
+    ) {
 
     val email = remember { mutableStateOf("") }
     val context = LocalContext.current
