@@ -35,6 +35,7 @@ import com.example.authentication.ui.screen.login.LoginScreen
 import com.example.authentication.ui.screen.forgotPssword.OTPConfirmationScreen
 import com.example.authentication.ui.screen.forgotPssword.SetPasswordScreen
 import com.example.authentication.ui.screen.SignUpScreen
+import com.example.authentication.ui.screen.dashboard.DashBoardScreen
 import com.example.authentication.ui.screen.forgotPssword.ForgotPassViewModel
 import androidx.navigation.compose.NavHost as NavHost
 
@@ -48,6 +49,7 @@ enum class AuthModuleScreen(@StringRes val title: Int) {
     UpdateProfile(title = R.string.update_profile),
     ChangePassword(title = R.string.change_password),
     EmailConfirmation(title = R.string.email_confirmation),
+    DashBoardScreen(title = R.string.dashboard),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -158,6 +160,11 @@ fun AuthModuleApp(
             composable(route = AuthModuleScreen.ChangePassword.name) {
                 ChangePasswordScreen()
             }
+
+            composable(route = AuthModuleScreen.Dashboard.name) {
+                DashBoardScreen()
+            }
+
         }
 
     }

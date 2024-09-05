@@ -1,9 +1,14 @@
 package com.example.authentication.di
 
+import android.content.Context
+import androidx.room.Room
+import com.example.authentication.services.local.AppDatabase
+import com.example.authentication.services.local.UserDao
 import com.example.authentication.services.network.NetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,5 +27,17 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(NetworkService::class.java)
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideUserDao(@ApplicationContext context: Context): UserDao {
+        val db = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java, "LoginCredential"
+        ).build()
+
+        return db.userDao();
     }
 }

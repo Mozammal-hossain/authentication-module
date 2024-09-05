@@ -1,8 +1,11 @@
 package com.example.authentication.model
 
+import com.example.authentication.model.data.login.LoginCredential
 import com.example.authentication.model.data.login.LoginRequestModel
 import com.example.authentication.model.data.login.LoginResponseModel
 import com.example.authentication.model.data.shared.ErrorModel
+import com.example.authentication.model.shared.ErrorUtils.parseError
+import com.example.authentication.services.local.UserDao
 import com.example.authentication.services.network.NetworkService
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +21,22 @@ sealed class LoginResult {
 }
 
 class LoginModel @Inject constructor(
-    private val apiService: NetworkService
+    private val networkService: NetworkService,
+    private val userDao: UserDao
 ) {
 
     private var _loginResponse: LoginResponseModel? = null;
 
+
+
+    suspend fun isLoggedIn(): Boolean = withContext(Dispatchers.IO) {
+        userDao.getAll()?.isNotEmpty() ?: false
+    }
+
+
     suspend fun login(email: String, password: String): LoginResult {
          return  try {
-                val response = apiService.login(
+                val response = networkService.login(
                     LoginRequestModel(
                         FCMToken = "Token1",
                         OS = "Android",
@@ -35,6 +46,12 @@ class LoginModel @Inject constructor(
                     )
                 )
                 Timber.i( "response: $response");
+
+             withContext(Dispatchers.IO) {
+                 val loginCredential = LoginCredential(email = email, password = password)
+                 userDao.insertUser(loginCredential)
+             }
+
                 LoginResult.Success(response)
             } catch (e: HttpException) {
                 // Handle HTTP errors
@@ -64,13 +81,5 @@ class LoginModel @Inject constructor(
                  )
              )
             }
-    }
-
-    private suspend fun parseError(exception: HttpException): ErrorModel {
-        return withContext(Dispatchers.IO) {
-            val errorBody = exception.response()?.errorBody()?.string()
-            val gson = Gson()
-            gson.fromJson(errorBody, ErrorModel::class.java)
-        }
     }
 }

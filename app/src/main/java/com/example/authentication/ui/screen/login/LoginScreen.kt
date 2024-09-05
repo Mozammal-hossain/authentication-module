@@ -49,7 +49,7 @@ import timber.log.Timber
  */
 @Composable
 fun LoginScreen(
-    onNavigateToDashboard: (Int) -> Unit,
+    onNavigateToDashboard: () -> Unit,
     onNavigateToForgotPassword: () -> Unit,
     onNavigateToSignUp: () -> Unit,
 ) {
@@ -66,7 +66,7 @@ fun LoginScreen(
 
     // If profileState is not null, navigate to the dashboard
     profileState?.let {
-        onNavigateToDashboard(it.user._id.toInt())
+        onNavigateToDashboard()
         Timber.tag("Login Response").d("Profile state updated: $it")
     }
 
