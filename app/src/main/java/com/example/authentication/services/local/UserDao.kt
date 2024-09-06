@@ -1,10 +1,9 @@
 package com.example.authentication.services.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.authentication.model.data.login.LoginCredential
+import com.example.authentication.model.data.local.login.LoginCredential
 
 
 @Dao
@@ -14,7 +13,4 @@ interface UserDao {
 
     @Insert
     suspend fun insertUser(vararg loginCredential: LoginCredential)
-
-    @Delete
-    suspend fun delete(loginCredential: LoginCredential)
 }

@@ -1,7 +1,7 @@
 package com.example.authentication.model
 
-import com.example.authentication.model.data.otpValidation.OTPValidationReqModel
-import com.example.authentication.model.data.otpValidation.OTPValidationResModel
+import com.example.authentication.model.data.remote.otpValidation.OTPValidationReqModel
+import com.example.authentication.model.data.remote.otpValidation.OTPValidationResModel
 import com.example.authentication.model.data.shared.ErrorModel
 import com.example.authentication.model.shared.ErrorUtils.parseError
 import com.example.authentication.services.network.NetworkService

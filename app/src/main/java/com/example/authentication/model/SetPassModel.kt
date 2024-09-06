@@ -1,7 +1,7 @@
 package com.example.authentication.model
 
-import com.example.authentication.model.data.setNewPass.SetNewPassReqModel
-import com.example.authentication.model.data.setNewPass.SetNewPassResModel
+import com.example.authentication.model.data.remote.setNewPass.SetNewPassReqModel
+import com.example.authentication.model.data.remote.setNewPass.SetNewPassResModel
 import com.example.authentication.model.data.shared.ErrorModel
 import com.example.authentication.model.shared.ErrorUtils.parseError
 import com.example.authentication.services.network.NetworkService

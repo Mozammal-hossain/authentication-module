@@ -1,13 +1,13 @@
 package com.example.authentication.services.network
 
-import com.example.authentication.model.data.forgotPassword.ForgotPassReqModel
-import com.example.authentication.model.data.forgotPassword.ForgotPassResModel
-import com.example.authentication.model.data.login.LoginRequestModel
-import com.example.authentication.model.data.login.LoginResponseModel
-import com.example.authentication.model.data.otpValidation.OTPValidationReqModel
-import com.example.authentication.model.data.otpValidation.OTPValidationResModel
-import com.example.authentication.model.data.setNewPass.SetNewPassReqModel
-import com.example.authentication.model.data.setNewPass.SetNewPassResModel
+import com.example.authentication.model.data.remote.forgotPassword.ForgotPassReqModel
+import com.example.authentication.model.data.remote.forgotPassword.ForgotPassResModel
+import com.example.authentication.model.data.remote.login.LoginRequestModel
+import com.example.authentication.model.data.remote.login.LoginResponseModel
+import com.example.authentication.model.data.remote.otpValidation.OTPValidationReqModel
+import com.example.authentication.model.data.remote.otpValidation.OTPValidationResModel
+import com.example.authentication.model.data.remote.setNewPass.SetNewPassReqModel
+import com.example.authentication.model.data.remote.setNewPass.SetNewPassResModel
 import retrofit2.http.Body
 import retrofit2.http.POST
 
