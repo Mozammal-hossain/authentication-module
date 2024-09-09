@@ -12,5 +12,6 @@ data class LoginCredential(
     @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "id") val id: String,
     @ColumnInfo(name = "token") val token: String,
-    @ColumnInfo(name = "name") val name: String
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "profilePic") val profilePic: String?
 )

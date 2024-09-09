@@ -4,11 +4,13 @@ import com.example.authentication.model.data.remote.forgotPassword.ForgotPassReq
 import com.example.authentication.model.data.remote.forgotPassword.ForgotPassResModel
 import com.example.authentication.model.data.remote.login.LoginRequestModel
 import com.example.authentication.model.data.remote.login.LoginResponseModel
+import com.example.authentication.model.data.remote.logout.LogOutResModel
 import com.example.authentication.model.data.remote.otpValidation.OTPValidationReqModel
 import com.example.authentication.model.data.remote.otpValidation.OTPValidationResModel
 import com.example.authentication.model.data.remote.setNewPass.SetNewPassReqModel
 import com.example.authentication.model.data.remote.setNewPass.SetNewPassResModel
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface NetworkService {
@@ -23,4 +25,9 @@ interface NetworkService {
 
     @POST("set-new-password")
     suspend fun setNewPass(@Body request: SetNewPassReqModel): SetNewPassResModel
+
+    @POST("logout")
+    suspend fun logout(
+        @Header("Authorization") token : String
+    ) : LogOutResModel
 }

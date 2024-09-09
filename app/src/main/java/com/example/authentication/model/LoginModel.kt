@@ -53,7 +53,8 @@ class LoginModel @Inject constructor(
                     password = password,
                     id = loggedInUser._id,
                     token = response.token,
-                    name = loggedInUser.firstname + " " + loggedInUser.lastname
+                    name = loggedInUser.firstname + " " + loggedInUser.lastname,
+                    profilePic = null,
                 )
 
                 userDao.insertUser(loginCredential)
