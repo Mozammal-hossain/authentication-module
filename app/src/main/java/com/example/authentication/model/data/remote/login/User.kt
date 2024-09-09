@@ -1,4 +1,4 @@
-package com.example.authentication.model.data.login
+package com.example.authentication.model.data.remote.login
 
 data class User(
     val _id: String,

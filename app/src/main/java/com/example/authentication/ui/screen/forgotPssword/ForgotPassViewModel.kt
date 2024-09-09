@@ -28,7 +28,7 @@ class ForgotPassViewModel @Inject constructor(
 
     /// LiveData for forgot password state
     private val _forgotPassState = MutableLiveData<ForgotPassResult? >()
-    val forgotPassState: MutableLiveData<ForgotPassResult?> = _forgotPassState
+    val forgotPassState: LiveData<ForgotPassResult?> = _forgotPassState
 
 
     /// LiveData for error state
@@ -37,6 +37,7 @@ class ForgotPassViewModel @Inject constructor(
 
 
     fun forgotPassword(email: String) {
+
         viewModelScope.launch {
             when (val result = forgotPassModel.forgotPassword(email)) {
                 is ForgotPassResult.Success -> {

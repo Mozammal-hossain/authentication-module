@@ -1,4 +1,4 @@
-package com.example.authentication.model.data.setNewPass
+package com.example.authentication.model.data.remote.setNewPass
 
 data class SetNewPassReqModel(
     val email: String,

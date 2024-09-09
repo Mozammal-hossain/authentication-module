@@ -1,6 +1,6 @@
 package com.example.authentication.model.data.shared
 
-import com.example.authentication.model.data.login.ErrorMessage
+import com.example.authentication.model.data.remote.login.ErrorMessage
 
 data class ErrorModel(
     val errorMessages: List<ErrorMessage>,

@@ -162,7 +162,12 @@ fun AuthModuleApp(
             }
 
             composable(route = AuthModuleScreen.Dashboard.name) {
-                DashBoardScreen()
+                DashBoardScreen(
+                    navigateToLogin = {
+                        navController.navigate(AuthModuleScreen.Start.name)
+                    },
+                )
+
             }
 
         }
