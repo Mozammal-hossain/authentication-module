@@ -7,9 +7,11 @@ import com.example.authentication.model.data.remote.login.LoginResponseModel
 import com.example.authentication.model.data.remote.logout.LogOutResModel
 import com.example.authentication.model.data.remote.otpValidation.OTPValidationReqModel
 import com.example.authentication.model.data.remote.otpValidation.OTPValidationResModel
+import com.example.authentication.model.data.remote.profile.ProfileResModel
 import com.example.authentication.model.data.remote.setNewPass.SetNewPassReqModel
 import com.example.authentication.model.data.remote.setNewPass.SetNewPassResModel
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 
@@ -30,4 +32,10 @@ interface NetworkService {
     suspend fun logout(
         @Header("Authorization") token : String
     ) : LogOutResModel
+
+    @GET("me")
+    suspend fun getProfile(
+        @Header("Authorization") token : String
+    ) : ProfileResModel
+
 }

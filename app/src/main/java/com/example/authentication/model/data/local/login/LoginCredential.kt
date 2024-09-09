@@ -6,11 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class LoginCredential(
-
-    @PrimaryKey(autoGenerate = true) val uId: Int = 0,
+    @PrimaryKey() val id: String,
     @ColumnInfo(name = "email") val email: String,
     @ColumnInfo(name = "password") val password: String,
-    @ColumnInfo(name = "id") val id: String,
     @ColumnInfo(name = "token") val token: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "profilePic") val profilePic: String?

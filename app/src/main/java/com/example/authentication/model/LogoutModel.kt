@@ -25,7 +25,7 @@ class LogoutModel @Inject constructor(
 
             Timber.i("Logout called");
 
-            val userToken = userDao.getAll()?.get(0)?.token ?: "";
+            val userToken = userDao.getAll()?.get(0)?.token
 
             Timber.i("userToken: $userToken");
 

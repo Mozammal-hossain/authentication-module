@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.authentication.model.ForgotPassResult
 import com.example.authentication.model.LogoutModel
 import com.example.authentication.model.LogoutResult
+import com.example.authentication.model.ProfileModel
+import com.example.authentication.model.ProfileModelResult
 import com.example.authentication.model.data.local.login.LoginCredential
 import com.example.authentication.services.local.UserDao
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardInfoViewModel @Inject constructor(
     private val userDao: UserDao,
-    private  val logoutModel: LogoutModel
+    private  val logoutModel: LogoutModel,
+    private val profileModel: ProfileModel
 ): ViewModel() {
 
     /// LiveData for user state
@@ -39,7 +42,6 @@ class DashboardInfoViewModel @Inject constructor(
 
     suspend fun getUser()  {
         val users = userDao.getAll()
-
         _user.value = users?.get(0);
     }
 
@@ -59,6 +61,27 @@ class DashboardInfoViewModel @Inject constructor(
             }
         }
     }
+
+
+     fun getProfile(){
+        viewModelScope.launch {
+            when (val result = profileModel.getProfile()) {
+                is ProfileModelResult.Success -> {
+                    _errorState.value = null
+                    _user.value = _user.value?.copy(profilePic = result.response.data.avatar)
+
+                    Timber.i("Profile successful: ${result.response}")
+                }
+                is ProfileModelResult.Error -> {
+
+                    Timber.e("Profile failed: ${result.error.message}")
+                }
+            }
+        }
+    }
+
+
+
 
 
 

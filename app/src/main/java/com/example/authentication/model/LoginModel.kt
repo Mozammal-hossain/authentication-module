@@ -57,7 +57,7 @@ class LoginModel @Inject constructor(
                     profilePic = null,
                 )
 
-                userDao.insertUser(loginCredential)
+                userDao.upsertUser(loginCredential)
             }
 
             LoginResult.Success(response)
