@@ -19,7 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -105,13 +105,17 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Divider(modifier = Modifier
-                    .weight(1f)
-                    .height(1.dp))
+                HorizontalDivider(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(1.dp)
+                )
                 Text(text = "OR", Modifier.padding(horizontal = 15.dp))
-                Divider(modifier = Modifier
-                    .weight(1f)
-                    .height(1.dp))
+                HorizontalDivider(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(1.dp)
+                )
             }
         }
 
@@ -189,7 +193,12 @@ fun LoginScreen(
                 color = Color(0xFF24786D),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .clickable { onNavigateToSignUp() }
+                    .clickable {
+                        Timber
+                            .tag("LoginScreenDebug")
+                            .d("Navigating to SignUpScreen")
+                        onNavigateToSignUp()
+                    }
             )
         }
     }
