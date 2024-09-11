@@ -8,11 +8,13 @@ import com.example.authentication.model.SignUpModel
 import com.example.authentication.model.SignUpResult
 import com.example.authentication.model.data.remote.signUp.SignUpRequestModel
 import com.example.authentication.model.data.remote.signUp.SignUpResponseModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val signUpModel: SignUpModel
+    private val signUpModel: SignUpModel,
 ) : ViewModel() {
 
 
