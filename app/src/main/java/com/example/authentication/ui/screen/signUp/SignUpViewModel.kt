@@ -7,20 +7,22 @@ import androidx.lifecycle.viewModelScope
 import com.example.authentication.model.SignUpModel
 import com.example.authentication.model.SignUpResult
 import com.example.authentication.model.data.remote.signUp.SignUpRequestModel
-import com.example.authentication.model.data.remote.signUp.SignUpResponseModel
+import com.example.authentication.ui.screen.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpModel: SignUpModel,
+    private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
 
 
     /// LiveData for sign up  state
-    private val _signUpState = MutableLiveData<SignUpResponseModel?>()
-    val signUpState: LiveData<SignUpResponseModel?> get() = _signUpState
+    private val _signUpState = MutableLiveData<SignUpResult.Success?>()
+    val signUpState: LiveData<SignUpResult.Success?> get() = _signUpState
 
 
     /// LiveData for error state
@@ -31,11 +33,15 @@ class SignUpViewModel @Inject constructor(
     fun signUp(email: String, firstname: String, lastname: String, password: String) {
         val requestBody = SignUpRequestModel(email, firstname, lastname, password)
 
+        Timber.i("In SignUpViewModel: $requestBody")
+
         viewModelScope.launch {
             when (val result = signUpModel.signUp(requestBody)) {
                 is SignUpResult.Success -> {
-                    _signUpState.value = result.response
+                    _signUpState.value = result
                     _errorState.value = null
+                    sharedViewModel.setEmail(email)
+
                 }
 
                 is SignUpResult.Error -> {

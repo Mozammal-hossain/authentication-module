@@ -1,4 +1,4 @@
-package com.example.authentication.ui.screen.forgotPssword
+package com.example.authentication.ui.screen.otpConfirmation
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -13,52 +13,72 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.authentication.model.SetNewPassResult
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.authentication.model.OTPValidationResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
 import timber.log.Timber
 
 @Composable
-fun SetPasswordScreen(
-    viewModel: ForgotPassViewModel,
-    navigateToLogin: () -> Unit
+fun OTPConfirmationScreen(
+    isForSettingPassword: Boolean,
+    onNavigateToResetPass: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
-    val password = remember { mutableStateOf("") }
-    val confirmPassword = remember { mutableStateOf("") }
 
+    val viewModel = hiltViewModel<OTPConfirmationViewModel>()
+
+    val otpCode = remember { mutableStateOf("") }
     val context = LocalContext.current
 
     // Observing the LiveData from the ViewModel
-    val setNewPassState by viewModel.setNewPassState.observeAsState()
+    val otpValidationState by viewModel.otpValidationState.observeAsState()
     val errorState by viewModel.errorState.observeAsState()
 
-    // Trigger navigation when setPassState is Success
-    LaunchedEffect(setNewPassState) {
-        if (setNewPassState is SetNewPassResult.Success) {
-            Timber.i("Forgot Password successful: ${(setNewPassState as SetNewPassResult.Success).response.message}")
 
-            navigateToLogin()
+    otpValidationState?.let {
+        if (it is OTPValidationResult.Success) {
 
-            Toast.makeText(context, (setNewPassState as SetNewPassResult.Success).response.message, Toast.LENGTH_LONG).show()
+            Timber.i("Came from Signup $isForSettingPassword")
 
-            viewModel.resetSetPassState() // Reset after handling success
+            viewModel.resetOTPValidationState()
+
+            Toast.makeText(
+                context,
+                it.response.message,
+                Toast.LENGTH_LONG
+            ).show()
+
+            if (isForSettingPassword) {
+                onNavigateToResetPass()
+            } else {
+                onNavigateToLogin()
+            }
+
+            Timber.i("OTP Validation successful: ${it.response.message}")
         }
     }
 
-    LaunchedEffect(errorState) {
-        errorState?.let {
-            Toast.makeText(context, errorState.toString() , Toast.LENGTH_LONG).show()
-            viewModel.resetSetPassState()
-        }
+
+    errorState?.let {
+        Timber.e("OTP Validation failed: $it")
+        Toast.makeText(
+            context,
+            it,
+            Toast.LENGTH_LONG
+        ).show()
+        viewModel.resetOTPValidationState() // Reset error state after handling
     }
 
 
@@ -70,23 +90,15 @@ fun SetPasswordScreen(
     ) {
         Spacer(modifier = Modifier.height(60.dp))
         PageName(
-            pageTitle = "Reset Password",
-            pageSubTitle = "Please enter a new password. Don’t enter your old password.",
+            pageTitle = "Email Confirmation",
+            pageSubTitle = "We’ve sent a code to your email address. Please check your inbox.",
         )
         Spacer(modifier = Modifier.height(70.dp))
 
         InputFieldWithLabel(
-            label = "Password",
+            label = "Your Code",
             hintText = "",
-            textFieldValue = password,
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        InputFieldWithLabel(
-            label = "Confirm Password",
-            hintText = "",
-            textFieldValue = confirmPassword,
+            textFieldValue = otpCode,
         )
 
         Spacer(Modifier.weight(1f))
@@ -94,9 +106,8 @@ fun SetPasswordScreen(
         Column {
             Button(
                 onClick = {
-                    viewModel.setPass(
-                        password = password.value,
-                        confirmPassword = confirmPassword.value
+                    viewModel.validateOTP(
+                        otp = otpCode.value
                     )
                 },
                 modifier = Modifier
@@ -113,9 +124,20 @@ fun SetPasswordScreen(
                 ),
             ) {
                 Text(
-                    text = "Reset Password",
+                    text = "Submit",
                 )
             }
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                text = "Resend code",
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                color = Color(0xFF24786D),
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+            )
         }
 
     }

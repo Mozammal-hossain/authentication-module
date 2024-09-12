@@ -6,12 +6,13 @@ import com.example.authentication.model.data.shared.ErrorModel
 import com.example.authentication.model.shared.ErrorUtils.parseError
 import com.example.authentication.services.network.NetworkService
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
-sealed class OTPValidationResult{
-data class Success(val response: OTPValidationResModel) : OTPValidationResult()
-data class Error(val error: ErrorModel) : OTPValidationResult()
+sealed class OTPValidationResult {
+    data class Success(val response: OTPValidationResModel) : OTPValidationResult()
+    data class Error(val error: ErrorModel) : OTPValidationResult()
 }
 
 class OTPValidationModel @Inject constructor(
@@ -20,7 +21,8 @@ class OTPValidationModel @Inject constructor(
 
 
     suspend fun validateOTP(email: String, otp: String): OTPValidationResult {
-        return try{
+        return try {
+            Timber.i("Model class email is $email and otp is $otp")
             val response = apiService.otpValidation(
                 OTPValidationReqModel(
                     email = email,

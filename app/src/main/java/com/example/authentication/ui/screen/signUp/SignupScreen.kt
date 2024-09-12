@@ -16,7 +16,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.authentication.model.data.remote.signUp.SignUpResponseModel
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
 
@@ -52,19 +50,25 @@ fun SignUpScreen(
 
     val context = LocalContext.current
 
+    signUpState?.let {
+        Toast.makeText(
+            context,
+            signUpState!!.response.message,
+            Toast.LENGTH_SHORT
+        ).show()
 
-    LaunchedEffect(signUpState) {
-        if (signUpState is SignUpResponseModel) {
-
-            Toast.makeText(
-                context,
-                "Sign up successful",
-                Toast.LENGTH_SHORT
-            ).show()
-
-//            onNavigateToOTP()
-        }
+        onNavigateToOTP()
     }
+
+
+    errorState?.let {
+        Toast.makeText(
+            context,
+            errorState,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
 
 
     Column(
@@ -117,7 +121,14 @@ fun SignUpScreen(
 
         Column {
             Button(
-                onClick = { checked = !checked },
+                onClick = {
+                    signUpViewModel.signUp(
+                        email = email.value,
+                        firstname = name.value,
+                        lastname = name.value,
+                        password = password.value
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),

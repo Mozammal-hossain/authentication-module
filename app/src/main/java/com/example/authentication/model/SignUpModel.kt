@@ -6,6 +6,7 @@ import com.example.authentication.model.data.shared.ErrorModel
 import com.example.authentication.model.shared.ErrorUtils.parseError
 import com.example.authentication.services.network.NetworkService
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ class SignUpModel @Inject constructor(
 ) {
     suspend fun signUp(signUpRequestModel: SignUpRequestModel): SignUpResult {
         try {
+            Timber.i("In signUpModel: $signUpRequestModel")
             val response = networkService.signUp(signUpRequestModel)
 
             return SignUpResult.Success(response)

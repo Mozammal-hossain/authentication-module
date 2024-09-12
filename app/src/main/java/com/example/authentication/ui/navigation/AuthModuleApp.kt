@@ -18,26 +18,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.authentication.R
 import com.example.authentication.ui.screen.ChangePasswordScreen
+import com.example.authentication.ui.screen.dashboard.DashBoardScreen
 import com.example.authentication.ui.screen.forgotPssword.ForgotPasswordScreen
 import com.example.authentication.ui.screen.login.LoginScreen
-import com.example.authentication.ui.screen.forgotPssword.OTPConfirmationScreen
-import com.example.authentication.ui.screen.forgotPssword.SetPasswordScreen
-import com.example.authentication.ui.screen.SignUpScreen
-import com.example.authentication.ui.screen.dashboard.DashBoardScreen
-import com.example.authentication.ui.screen.forgotPssword.ForgotPassViewModel
-import androidx.navigation.compose.NavHost as NavHost
+import com.example.authentication.ui.screen.otpConfirmation.OTPConfirmationScreen
+import com.example.authentication.ui.screen.setPassword.SetPasswordScreen
+import com.example.authentication.ui.screen.signUp.SignUpScreen
 
 
 enum class AuthModuleScreen(@StringRes val title: Int) {
@@ -82,14 +77,6 @@ fun AuthModuleApp(
     navController: NavHostController = rememberNavController()
 ) {
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-
-    val currentScreen = AuthModuleScreen.valueOf(
-        backStackEntry?.destination?.route ?: AuthModuleScreen.Start.name
-    )
-
-    val forgotPassViewModel: ForgotPassViewModel = viewModel()
-
     Scaffold {
         val innerPadding = it
         NavHost(
@@ -117,40 +104,52 @@ fun AuthModuleApp(
             }
 
             composable(route = AuthModuleScreen.Signup.name) {
+                val isForSettingPassword: Boolean = false
+
                 SignUpScreen(
                     onNavigateToLogin = {
                         navController.navigate(AuthModuleScreen.Start.name)
                     },
                     onNavigateToOTP = {
-                        navController.navigate(AuthModuleScreen.EmailConfirmation.name)
+                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/$isForSettingPassword")
+
                     }
                 )
             }
 
             composable(route = AuthModuleScreen.ForgotPassword.name) {
+                val isForSettingPassword: Boolean = true
+
                 ForgotPasswordScreen(
                     onNavigateToOTP = {
-                        navController.navigate(AuthModuleScreen.EmailConfirmation.name)
+                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/$isForSettingPassword")
                     },
-                    forgotPassViewModel = forgotPassViewModel,
                 )
             }
 
-            composable(route = AuthModuleScreen.EmailConfirmation.name) {
+            composable(
+                route = "${AuthModuleScreen.EmailConfirmation.name}/{isForSettingPassword}"
+            ) { navBackStackEntry ->
+                val isForSettingPassword =
+                    navBackStackEntry.arguments?.getBoolean("isForSettingPassword")
+                        ?: false // Handle null case
 
                 OTPConfirmationScreen(
+                    isForSettingPassword = isForSettingPassword, // Pass retrieved argument
                     onNavigateToResetPass = {
                         navController.navigate(AuthModuleScreen.ResetPassword.name)
                     },
-                    forgotPassViewModel = forgotPassViewModel
+                    onNavigateToLogin = {
+                        navController.navigate(AuthModuleScreen.Start.name)
+                    }
                 )
             }
+
 
 
             composable(route = AuthModuleScreen.ResetPassword.name) {
 
                 SetPasswordScreen(
-                    viewModel = forgotPassViewModel,
                     navigateToLogin = {
                         navController.navigate(AuthModuleScreen.Start.name)
                     },
