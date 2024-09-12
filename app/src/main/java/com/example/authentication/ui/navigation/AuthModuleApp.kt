@@ -22,9 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.authentication.R
 import com.example.authentication.ui.screen.ChangePasswordScreen
 import com.example.authentication.ui.screen.dashboard.DashBoardScreen
@@ -104,35 +106,33 @@ fun AuthModuleApp(
             }
 
             composable(route = AuthModuleScreen.Signup.name) {
-                val isForSettingPassword: Boolean = false
 
                 SignUpScreen(
                     onNavigateToLogin = {
                         navController.navigate(AuthModuleScreen.Start.name)
                     },
                     onNavigateToOTP = {
-                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/$isForSettingPassword")
+                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/false")
 
                     }
                 )
             }
 
             composable(route = AuthModuleScreen.ForgotPassword.name) {
-                val isForSettingPassword: Boolean = true
 
                 ForgotPasswordScreen(
                     onNavigateToOTP = {
-                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/$isForSettingPassword")
+                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/true")
                     },
                 )
             }
 
             composable(
-                route = "${AuthModuleScreen.EmailConfirmation.name}/{isForSettingPassword}"
-            ) { navBackStackEntry ->
+                route = "${AuthModuleScreen.EmailConfirmation.name}/{isForSettingPassword}",
+                arguments = listOf(navArgument("isForSettingPassword") { type = NavType.BoolType })
+            ) {
                 val isForSettingPassword =
-                    navBackStackEntry.arguments?.getBoolean("isForSettingPassword")
-                        ?: false // Handle null case
+                    it.arguments?.getBoolean("isForSettingPassword") ?: false
 
                 OTPConfirmationScreen(
                     isForSettingPassword = isForSettingPassword, // Pass retrieved argument
