@@ -2,6 +2,7 @@ package com.example.authentication.ui.screen.otpConfirmation
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +46,7 @@ fun OTPConfirmationScreen(
     // Observing the LiveData from the ViewModel
     val otpValidationState by viewModel.otpValidationState.observeAsState()
     val errorState by viewModel.errorState.observeAsState()
+    val resendOTPState by viewModel.resendOTPState.observeAsState()
 
 
     otpValidationState?.let {
@@ -70,7 +72,6 @@ fun OTPConfirmationScreen(
         }
     }
 
-
     errorState?.let {
         Timber.e("OTP Validation failed: $it")
         Toast.makeText(
@@ -80,6 +81,19 @@ fun OTPConfirmationScreen(
         ).show()
         viewModel.resetOTPValidationState() // Reset error state after handling
     }
+
+    resendOTPState?.let {
+        if (it.isNotEmpty()) {
+            Toast.makeText(
+                context,
+                it,
+                Toast.LENGTH_LONG
+            ).show()
+            viewModel.resetResendOTPState() // Reset error state after handling
+        }
+    }
+
+
 
 
     Column(
@@ -137,6 +151,9 @@ fun OTPConfirmationScreen(
                 color = Color(0xFF24786D),
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
+                    .clickable {
+                        viewModel.resendOTP()
+                    }
             )
         }
 

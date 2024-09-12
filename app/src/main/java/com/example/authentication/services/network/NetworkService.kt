@@ -8,6 +8,8 @@ import com.example.authentication.model.data.remote.logout.LogOutResModel
 import com.example.authentication.model.data.remote.otpValidation.OTPValidationReqModel
 import com.example.authentication.model.data.remote.otpValidation.OTPValidationResModel
 import com.example.authentication.model.data.remote.profile.ProfileResModel
+import com.example.authentication.model.data.remote.resend.ResendRequestDataModel
+import com.example.authentication.model.data.remote.resend.ResendResponseDataModel
 import com.example.authentication.model.data.remote.setNewPass.SetNewPassReqModel
 import com.example.authentication.model.data.remote.setNewPass.SetNewPassResModel
 import com.example.authentication.model.data.remote.signUp.SignUpRequestModel
@@ -26,6 +28,9 @@ interface NetworkService {
 
     @POST("forget-password")
     suspend fun forgotPassword(@Body request: ForgotPassReqModel): ForgotPassResModel
+
+    @POST("resend-otp")
+    suspend fun resendOTP(@Body request: ResendRequestDataModel): ResendResponseDataModel
 
     @POST("verifyOtp")
     suspend fun otpValidation(@Body request: OTPValidationReqModel): OTPValidationResModel
