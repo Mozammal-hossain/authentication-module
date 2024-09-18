@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.authentication.model.data.remote.login.LoginResponseModel
 import com.example.authentication.model.LoginModel
 import com.example.authentication.model.LoginResult
+import com.example.authentication.model.data.remote.login.LoginResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,14 +25,15 @@ class LoginViewModel @Inject constructor(
     private val _errorState = MutableLiveData<String?>()
     val errorState: LiveData<String?> get() = _errorState
 
-    fun login(email: String, password: String){
+    fun login(email: String, password: String, isRememberMe: Boolean) {
         viewModelScope.launch {
-            when (val result = loginModel.login(email, password)) {
+            when (val result = loginModel.login(email, password, isRememberMe)) {
                 is LoginResult.Success -> {
                     _profileState.value = result.response
                     _errorState.value = null  // Clear any previous errors
                     Timber.i("Login successful: ${result.response.user}")
                 }
+
                 is LoginResult.Error -> {
                     _errorState.value = result.error.message
                     Timber.e("Login failed: ${result.error.message}")

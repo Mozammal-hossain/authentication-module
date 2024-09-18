@@ -1,6 +1,5 @@
 package com.example.authentication.ui.screen.login
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.authentication.R
+import com.example.authentication.R.drawable
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
 import timber.log.Timber
@@ -73,7 +74,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp)
+            .padding(16.dp)
     ) {
         Spacer(modifier = Modifier.height(140.dp))
 
@@ -93,9 +94,9 @@ fun LoginScreen(
                     .align(Alignment.CenterHorizontally),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                SocialLoginButton(iconId = R.drawable.facebook)
-                SocialLoginButton(iconId = R.drawable.google)
-                SocialLoginButton(iconId = R.drawable.apple)
+                SocialLoginButton(iconId = drawable.facebook)
+                SocialLoginButton(iconId = drawable.google)
+                SocialLoginButton(iconId = drawable.apple)
             }
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -144,14 +145,16 @@ fun LoginScreen(
                 Text(text = it, color = Color.Red)
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
 
             // Remember Me checkbox and Forgot Password link
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                RememberMeCheckbox(checked = checked, onCheckedChange = { checked = it })
+            )
+            {
+                RememberMeCheckbox(check = checked, onCheckedChange = { checked = it })
 
                 Text(
                     text = "Forgot Password?",
@@ -173,7 +176,7 @@ fun LoginScreen(
                         .d("Email: ${email.value} Password: ${password.value}")
 
                     // Trigger the login process
-                    loginViewModel.login(email.value, password.value)
+                    loginViewModel.login(email.value, password.value, checked)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -230,25 +233,33 @@ fun SocialLoginButton(iconId: Int) {
 /**
  * Composable function for the Remember Me checkbox.
  *
- * @param checked Boolean state of the checkbox.
+ * @param check Boolean state of the checkbox.
  * @param onCheckedChange Callback when the checkbox state changes.
  */
 @Composable
-fun RememberMeCheckbox(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Button(
-            onClick = { onCheckedChange(!checked) },
-            modifier = Modifier.size(16.dp),
-            shape = RoundedCornerShape(5.dp),
-            border = BorderStroke(2.dp, Color(0xFF24786D)),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.1f))
-        ) {}
-        Spacer(modifier = Modifier.width(7.dp))
+fun RememberMeCheckbox(check: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    var checked by remember { mutableStateOf(check) }
+    Row {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { checked = it },
+            colors = CheckboxDefaults.colors(
+                checkedColor = Color(0xFF24786D),
+                checkmarkColor = Color.White,
+                uncheckedColor = Color(0xFF24786D),
+            ),
+            modifier = Modifier
+                .padding(0.dp)
+                .size(24.dp)
+        )
         Text(
             text = "Remember Me",
             fontWeight = FontWeight.Medium,
             fontSize = 14.sp,
-            color = Color(0xFF24786D)
+            color = Color(0xFF24786D),
+            modifier = Modifier.clickable {
+                checked = !checked
+            }
         )
     }
 }
