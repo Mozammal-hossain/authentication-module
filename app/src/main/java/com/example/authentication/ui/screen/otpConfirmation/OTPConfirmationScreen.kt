@@ -1,6 +1,7 @@
 package com.example.authentication.ui.screen.otpConfirmation
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,10 @@ fun OTPConfirmationScreen(
     val otpValidationState by viewModel.otpValidationState.observeAsState()
     val errorState by viewModel.errorState.observeAsState()
     val resendOTPState by viewModel.resendOTPState.observeAsState()
+
+    BackHandler {
+        onNavigateToLogin()
+    }
 
 
     otpValidationState?.let {

@@ -45,8 +45,7 @@ enum class AuthModuleScreen(@StringRes val title: Int) {
     ResetPassword(title = R.string.reset_password),
     UpdateProfile(title = R.string.update_profile),
     ChangePassword(title = R.string.change_password),
-    EmailConfirmation(title = R.string.email_confirmation),
-    DashBoardScreen(title = R.string.dashboard),
+    OTPConfirmation(title = R.string.email_confirmation),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,10 +108,12 @@ fun AuthModuleApp(
 
                 SignUpScreen(
                     onNavigateToLogin = {
-                        navController.navigate(AuthModuleScreen.Start.name)
+                        navController.navigate(AuthModuleScreen.Start.name) {
+                            popUpTo(AuthModuleScreen.Start.name) { inclusive = true }
+                        }
                     },
                     onNavigateToOTP = {
-                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/false")
+                        navController.navigate("${AuthModuleScreen.OTPConfirmation.name}/false")
 
                     }
                 )
@@ -122,25 +123,28 @@ fun AuthModuleApp(
 
                 ForgotPasswordScreen(
                     onNavigateToOTP = {
-                        navController.navigate("${AuthModuleScreen.EmailConfirmation.name}/true")
+                        navController.navigate("${AuthModuleScreen.OTPConfirmation.name}/true")
+
                     },
                 )
             }
 
             composable(
-                route = "${AuthModuleScreen.EmailConfirmation.name}/{isForSettingPassword}",
+                route = "${AuthModuleScreen.OTPConfirmation.name}/{isForSettingPassword}",
                 arguments = listOf(navArgument("isForSettingPassword") { type = NavType.BoolType })
             ) {
                 val isForSettingPassword =
                     it.arguments?.getBoolean("isForSettingPassword") ?: false
 
                 OTPConfirmationScreen(
-                    isForSettingPassword = isForSettingPassword, // Pass retrieved argument
+                    isForSettingPassword = isForSettingPassword,
                     onNavigateToResetPass = {
                         navController.navigate(AuthModuleScreen.ResetPassword.name)
                     },
                     onNavigateToLogin = {
-                        navController.navigate(AuthModuleScreen.Start.name)
+                        navController.navigate(AuthModuleScreen.Start.name) {
+                            popUpTo(AuthModuleScreen.Start.name) { inclusive = true }
+                        }
                     }
                 )
             }
@@ -148,7 +152,6 @@ fun AuthModuleApp(
 
 
             composable(route = AuthModuleScreen.ResetPassword.name) {
-
                 SetPasswordScreen(
                     navigateToLogin = {
                         navController.navigate(AuthModuleScreen.Start.name)
