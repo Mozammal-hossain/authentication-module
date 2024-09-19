@@ -1,7 +1,8 @@
-package com.example.authentication.ui.screen.forgotPssword
+package com.example.authentication.ui.screen.otpConfirmation
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.authentication.model.OTPValidationResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
@@ -31,34 +33,44 @@ import timber.log.Timber
 
 @Composable
 fun OTPConfirmationScreen(
+    isForSettingPassword: Boolean,
     onNavigateToResetPass: () -> Unit,
-    forgotPassViewModel: ForgotPassViewModel
+    onNavigateToLogin: () -> Unit
 ) {
+
+    val viewModel = hiltViewModel<OTPConfirmationViewModel>()
 
     val otpCode = remember { mutableStateOf("") }
     val context = LocalContext.current
 
     // Observing the LiveData from the ViewModel
-    val otpValidationState by forgotPassViewModel.otpValidationState.observeAsState()
-    val errorState by forgotPassViewModel.errorState.observeAsState()
+    val otpValidationState by viewModel.otpValidationState.observeAsState()
+    val errorState by viewModel.errorState.observeAsState()
+    val resendOTPState by viewModel.resendOTPState.observeAsState()
 
 
     otpValidationState?.let {
-        if ( it is OTPValidationResult.Success) {
+        if (it is OTPValidationResult.Success) {
 
-            forgotPassViewModel.resetOTPValidationState()
+            Timber.i("Came from Signup $isForSettingPassword")
+
+            viewModel.resetOTPValidationState()
+
             Toast.makeText(
                 context,
-                "OTP code is valid",
+                it.response.message,
                 Toast.LENGTH_LONG
             ).show()
 
-            onNavigateToResetPass()
+            if (isForSettingPassword) {
+                onNavigateToResetPass()
+            } else {
+                onNavigateToLogin()
+            }
 
             Timber.i("OTP Validation successful: ${it.response.message}")
         }
     }
-
 
     errorState?.let {
         Timber.e("OTP Validation failed: $it")
@@ -67,8 +79,21 @@ fun OTPConfirmationScreen(
             it,
             Toast.LENGTH_LONG
         ).show()
-        forgotPassViewModel.resetOTPValidationState() // Reset error state after handling
+        viewModel.resetOTPValidationState() // Reset error state after handling
     }
+
+    resendOTPState?.let {
+        if (it.isNotEmpty()) {
+            Toast.makeText(
+                context,
+                it,
+                Toast.LENGTH_LONG
+            ).show()
+            viewModel.resetResendOTPState() // Reset error state after handling
+        }
+    }
+
+
 
 
     Column(
@@ -95,7 +120,7 @@ fun OTPConfirmationScreen(
         Column {
             Button(
                 onClick = {
-                    forgotPassViewModel.validateOTP(
+                    viewModel.validateOTP(
                         otp = otpCode.value
                     )
                 },
@@ -126,6 +151,9 @@ fun OTPConfirmationScreen(
                 color = Color(0xFF24786D),
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
+                    .clickable {
+                        viewModel.resendOTP()
+                    }
             )
         }
 

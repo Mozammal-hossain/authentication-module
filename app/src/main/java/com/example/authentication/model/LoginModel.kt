@@ -23,16 +23,11 @@ class LoginModel @Inject constructor(
     private val networkService: NetworkService,
     private val userDao: UserDao
 ) {
-
-    private var _loginResponse: LoginResponseModel? = null;
-
-
     suspend fun isLoggedIn(): Boolean = withContext(Dispatchers.IO) {
         userDao.getAll()?.isNotEmpty() ?: false
     }
 
-
-    suspend fun login(email: String, password: String): LoginResult {
+    suspend fun login(email: String, password: String, isRememberMe: Boolean): LoginResult {
         return try {
             val response = networkService.login(
                 LoginRequestModel(
@@ -43,21 +38,23 @@ class LoginModel @Inject constructor(
                     password = password,
                 )
             )
-            Timber.i("response: $response");
+            Timber.i("response: $response")
 
-            val loggedInUser = response.user;
+            if (isRememberMe) {
+                val loggedInUser = response.user
 
-            withContext(Dispatchers.IO) {
-                val loginCredential = LoginCredential(
-                    email = email,
-                    password = password,
-                    id = loggedInUser._id,
-                    token = response.token,
-                    name = loggedInUser.firstname + " " + loggedInUser.lastname,
-                    profilePic = null,
-                )
+                withContext(Dispatchers.IO) {
+                    val loginCredential = LoginCredential(
+                        email = email,
+                        password = password,
+                        id = loggedInUser._id,
+                        token = response.token,
+                        name = loggedInUser.firstname + " " + loggedInUser.lastname,
+                        profilePic = null,
+                    )
 
-                userDao.upsertUser(loginCredential)
+                    userDao.upsertUser(loginCredential)
+                }
             }
 
             LoginResult.Success(response)

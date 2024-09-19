@@ -33,9 +33,11 @@ import timber.log.Timber
 
 
 @Composable
-fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit,
-                         forgotPassViewModel: ForgotPassViewModel,
-    ) {
+fun ForgotPasswordScreen(
+    onNavigateToOTP: (String) -> Unit,
+) {
+
+    val forgotPassViewModel = hiltViewModel<ForgotPassViewModel>()
 
     val email = remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -49,14 +51,18 @@ fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit,
         if (forgotPassState is ForgotPassResult.Success) {
             Timber.i("Forgot Password successful: ${(forgotPassState as ForgotPassResult.Success).response.message}")
             onNavigateToOTP(email.value)
-            Toast.makeText(context, (forgotPassState as ForgotPassResult.Success).response.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                (forgotPassState as ForgotPassResult.Success).response.message,
+                Toast.LENGTH_LONG
+            ).show()
             forgotPassViewModel.resetForgotPassState() // Reset after handling success
         }
     }
 
     LaunchedEffect(errorState) {
         errorState?.let {
-            Toast.makeText(context, errorState.toString() , Toast.LENGTH_LONG).show()
+            Toast.makeText(context, errorState.toString(), Toast.LENGTH_LONG).show()
             forgotPassViewModel.resetForgotPassState()
         }
     }
@@ -92,7 +98,7 @@ fun ForgotPasswordScreen(onNavigateToOTP: (String) -> Unit,
                         .d("Email: ${email.value}")
 
                     // Trigger the Forgot Password process
-                    forgotPassViewModel.forgotPassword(email.value);
+                    forgotPassViewModel.forgotPassword(email.value)
 
                 },
                 modifier = Modifier

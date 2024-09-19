@@ -1,4 +1,4 @@
-package com.example.authentication.ui.screen.forgotPssword
+package com.example.authentication.ui.screen.setPassword
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.authentication.model.SetNewPassResult
 import com.example.authentication.ui.theme.components.InputFieldWithLabel
 import com.example.authentication.ui.theme.components.PageName
@@ -29,9 +30,10 @@ import timber.log.Timber
 
 @Composable
 fun SetPasswordScreen(
-    viewModel: ForgotPassViewModel,
     navigateToLogin: () -> Unit
 ) {
+    val viewModel = hiltViewModel<SetPasswordViewModel>()
+
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
 
@@ -48,7 +50,11 @@ fun SetPasswordScreen(
 
             navigateToLogin()
 
-            Toast.makeText(context, (setNewPassState as SetNewPassResult.Success).response.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                (setNewPassState as SetNewPassResult.Success).response.message,
+                Toast.LENGTH_LONG
+            ).show()
 
             viewModel.resetSetPassState() // Reset after handling success
         }
@@ -56,7 +62,7 @@ fun SetPasswordScreen(
 
     LaunchedEffect(errorState) {
         errorState?.let {
-            Toast.makeText(context, errorState.toString() , Toast.LENGTH_LONG).show()
+            Toast.makeText(context, errorState.toString(), Toast.LENGTH_LONG).show()
             viewModel.resetSetPassState()
         }
     }
